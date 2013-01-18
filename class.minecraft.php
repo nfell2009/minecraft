@@ -20,6 +20,8 @@ class Minecraft
 		$request = curl_init();
 		curl_setopt($request, CURLOPT_HEADER, 0);
 		curl_setopt($request, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($request, CURLOPT_SSL_VERIFYPEER, 0);
+        curl_setopt($request, CURLOPT_FOLLOWLOCATION, 1);
 		if ($parameters != null) {
 			curl_setopt($request, CURLOPT_URL, $website.'?'.http_build_query($parameters, null, '&'));
 		} else {
@@ -41,8 +43,8 @@ class Minecraft
 				'current_version' => $response[0],
 				'correct_username' => $response[2],
 				'session_token' => $response[3],
-				'premium_account' => $this->isPremium($username),
-				'player_skin' => $this->getSkin($username),
+				'premium_account' => $this->isPremium($response[2]),
+				'player_skin' => $this->getSkin($response[2]),
 				'request_timestamp' => date("dmYhms", mktime(date('h'), date('m'), date('s'), date('m'), date('d'), date('y')))
 			);
 			return true;
