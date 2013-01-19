@@ -47,7 +47,7 @@ class Minecraft
 				'player_skin' => $this->getSkin($response[2]),
 				'request_timestamp' => date("dmYhms", mktime(date('h'), date('m'), date('s'), date('m'), date('d'), date('y')))
 			);
-			return true;
+			return $this->account;
 		}
 		return false;
 	}

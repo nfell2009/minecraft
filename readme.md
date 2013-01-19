@@ -27,8 +27,8 @@ $minecraft->login('username', 'password', 'version');
 ```
 
 This function is used to login to your Minecraft account, taking 3 parameters: username, password and the version of the minecraft
-launcher which currently defaults to **12**. This returns **true** if the user was successfully authenticated and **false**
-otherwise. An array is also set upon successful login which contains the following...
+launcher which currently defaults to **12**. This returns that users account details if the user was successfully authenticated and **false**
+otherwise. The account array that is set upon successful login contains the following...
 
 * **current_version**: The current version of the games resources.
 * **correct_username**: A correctly formatted username.
