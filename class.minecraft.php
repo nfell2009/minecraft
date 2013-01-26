@@ -1,21 +1,26 @@
 <?php
 
-	/*
-	 * @product: Minecraft Class
-	 * @description: Intergrate Minecraft within your own projects.
-	 * @author: Nathaniel Blackburn
-	 * @version: 2.0
-	 * @license: http://creativecommons.org/licenses/by/3.0/legalcode
-	 * @support: support@nblackburn.co.uk
-	 * @website: http://www.nblackburn.co.uk
-	*/
-
+/**
+ * @class: Minecraft
+ * @description: Intergrate Minecraft within your own projects.
+ * @author: Nathaniel Blackburn
+ * @version: 2.0
+ * @license: http://creativecommons.org/licenses/by/3.0/legalcode
+ * @support: support@nblackburn.co.uk
+ * @website: http://www.nblackburn.co.uk
+ */
 class Minecraft
 {
 
-	public $account;
+	public $account = array();
 
-	private function request($website, array $parameters)
+    /**
+     * @description Sends a request and it's parameters (if applicable) to a website and returns it's reponse.
+     * @param $website
+     * @param array $parameters
+     * @return mixed|null
+     */
+    private function request($website, array $parameters)
 	{
 		$request = curl_init();
 		curl_setopt($request, CURLOPT_HEADER, 0);
@@ -33,7 +38,14 @@ class Minecraft
         return ($details['http_code'] == 200) ? $response : null;
 	}
 
-	public function signin($username, $password, $version = 12)
+    /**
+     * @description Signs a user in to their Minecraft account and returns their account details.
+     * @param $username
+     * @param $password
+     * @param int $version
+     * @return array|bool
+     */
+    public function signin($username, $password, $version = 12)
 	{
 		$parameters = array('user' => $username, 'password' => $password, 'version' => $version);
 		$request = $this->request('https://login.minecraft.net/', $parameters);
@@ -52,13 +64,23 @@ class Minecraft
 		return false;
 	}
 
-	public function isPremium($username)
+    /**
+     * @description Checks whether or not the user specified as purchased Minecraft.
+     * @param $username
+     * @return mixed|null
+     */
+    public function isPremium($username)
 	{
 		$parameters = array('user' => $username);
 		return $this->request('https://www.minecraft.net/haspaid.jsp', $parameters);
 	}
 
-	public function getSkin($username)
+    /**
+     * @description Returns the URL to the users custom skin (if appicable).
+     * @param $username
+     * @return bool|string
+     */
+    public function getSkin($username)
 	{
 		if ($this->isPremium($username)) {
 			$headers = get_headers('http://s3.amazonaws.com/MinecraftSkins/'.$username.'.png');
@@ -71,28 +93,57 @@ class Minecraft
 		return false;
 	}
 
-	public function keepAlive($username, $session)
+    /**
+     * @description Keeps the specified users active session alive.
+     * @param $username
+     * @param $session
+     * @return null
+     */
+    public function keepAlive($username, $session)
 	{
 		$parameters = array('name' => $username, 'session' => $session);
 		$this->request('https://login.minecraft.net/session', $parameters);
-		return null;
 	}
 
-	public function joinServer($username, $session, $server)
+    /**
+     * @description Adds the specified user to the server.
+     * @param $username
+     * @param $session
+     * @param $server
+     * @return bool
+     */
+    public function joinServer($username, $session, $server)
 	{
-		$parameters = array('user' => $username, 'sessionId' => $session, 'serverId' => $server);
-		$request = $this->request('http://session.minecraft.net/game/joinserver.jsp', $parameters);
-		return ($request != 'Bad Login') ? true : false;
-	}
+        $request = false;
+		if ($this->checkServer($username, $session, $server))
+        {
+            $parameters = array('user' => $username, 'sessionId' => $session, 'serverId' => $server);
+            $request = $this->request('http://session.minecraft.net/game/joinserver.jsp', $parameters);
+        }
+        return ($request != 'Bad Login' || 'Failed to verify username!') ? true : false;
+    }
 
-	public function checkServer($username, $server)
+    /**
+     * @description Checks if the specified user is able to join the server.
+     * @param $username
+     * @param $server
+     * @return bool
+     */
+    public function checkServer($username, $server)
 	{
 		$parameters = array('user' => $username, 'serverId' => $server);
 		$request = $this->request('http://session.minecraft.net/game/checkserver.jsp', $parameters);
 		return ($request == 'YES') ? true : false;
 	}
 
-	public function renderSkin($username, $render_type = 'body', $size = 100)
+    /**
+     * @description Renders the specified users skin.
+     * @param $username
+     * @param string $render_type
+     * @param int $size
+     * @return bool
+     */
+    public function renderSkin($username, $render_type = 'body', $size = 100)
 	{
 		if (in_array($render_type, array('head', 'body'))) {
 			if ($render_type == 'head') {
