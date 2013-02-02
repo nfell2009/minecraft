@@ -46,7 +46,7 @@ class Minecraft
      */
     private function getMimeType($content)
     {
-        preg_match_all('/content-type:\s([a-z\/?]+)/i', $content, $matches);
+        preg_match_all('/content-type:\s?([a-z0-9\/?]+);?/i', $content, $matches);
         return $matches[1];
     }
 
