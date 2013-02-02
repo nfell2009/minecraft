@@ -23,7 +23,7 @@ are you permitted to use this for malicious purposes.
 #### Login
 
 ```php
-$minecraft->login('username', 'password', 'version');
+$minecraft->signin('username', 'password', 'version');
 ```
 
 This function is used to login to your Minecraft account, taking 3 parameters: username, password and the version of the minecraft
@@ -49,7 +49,7 @@ when calling this function.
 #### Is Premium
 
 ```php
-$minecraft->is_premium('username');
+$minecraft->isPremium('username');
 ```
 
 This function determines if the user specified has a premium account or not. It takes a single parameter of **username** and
@@ -60,7 +60,7 @@ returns **true** if a premium account was detected and **false** otherwise.
 #### Get Skin
 
 ```php
-$minecraft->get_skin('username');
+$minecraft->getSkin('username');
 ```
 
 This function firstly checks the user specified has a premium account, then returns a url to the skin file for that user if
@@ -71,16 +71,12 @@ a custom skin was found. It takes a single parameter which is the **username** o
 #### Keep Alive
 
 ```php
-$minecraft->keep_alive('username', 'session');
+$minecraft->keepAlive('username', 'session');
 ```
 
 This function is used to keep the users current session alive, this command needs sending to the Minecraft servers every 600
 ticks (60 seconds) otherwise the user is signed out. It takes 2 parameters, the **username** and **session** returned from signing
 in to your account, this can be obtained with the following code...
-
----
-
-#### Account
 
 ```php
 $minecraft->account['session_token'];
@@ -93,7 +89,7 @@ The function returns **null** as the Minecraft server doesnt appear to throw bac
 #### Render Skin
 
 ```php
-$minecraft->render_skin($username, $render_type, $size);
+$minecraft->renderSkin($username, $render_type, $size);
 ```
 
 This function renders the specified player's skin. It takes 3 parameters, the first being the **username** of the player whos skin you wish to render,
