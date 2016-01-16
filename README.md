@@ -3,7 +3,7 @@
 This class was developed to provide a set of functions to integrate Minecraft within your projects. Under no circumstances
 are you permitted to use this for malicious purposes.
 
-> **NOTE**: This library is no longer maintained.
+> **NOTE**: This library is no longer maintained, i may revisit this in the future to work with the new API but for now consider this archived.
 
 #### Example Usage
 
